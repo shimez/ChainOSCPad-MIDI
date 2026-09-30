@@ -1,0 +1,97 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#10201d">
+  <meta name="description" content="ChainOSCPadと同じ12キーとエンコーダーをMIDIコントローラーに。XIAO ESP32S3/C3/C6/C5用Web Installer。">
+  <title>ChainOSCPad MIDI — Web Installer</title>
+  <script type="module" src="https://unpkg.com/esp-web-tools@10.4.0/dist/web/install-button.js?module"></script>
+  <style>
+    :root { color-scheme: dark; font-family: system-ui, sans-serif; color: #eaf5ef; background: #0b1513; }
+    * { box-sizing: border-box; }
+    body { margin: 0; background: radial-gradient(ellipse at top right, #214b40, transparent 60%); }
+    main { max-width: 820px; margin: auto; padding: 56px 24px; }
+    .eyebrow { color: #8ad7b6; letter-spacing: .16em; font-size: .8rem; font-weight: 700; }
+    h1 { font-size: clamp(2.1rem, 6vw, 3.4rem); letter-spacing: -.045em; margin: 14px 0; }
+    h2 { font-size: 1.2rem; margin-top: 0; }
+    p, li { line-height: 1.85; }
+    .lead, footer { color: #b0c5bd; }
+    .badge { display: inline-block; border: 1px solid #3c6857; border-radius: 30px; padding: 5px 14px; margin: 8px 0 28px; }
+    section { padding: 28px; margin-bottom: 20px; border: 1px solid #345348; border-radius: 18px; background: #12251fee; }
+    label { display: block; margin-bottom: 10px; font-weight: 600; }
+    select { width: 100%; font: inherit; background: #0b1914; color: inherit; padding: 14px; border: 1px solid #729a87; border-radius: 8px; }
+    button { font: inherit; font-weight: 700; background: #99e7bf; color: #10251a; border: 0; border-radius: 8px; padding: 15px 24px; cursor: pointer; }
+    button:disabled { opacity: .5; cursor: wait; }
+    button:focus-visible, select:focus-visible, a:focus-visible { outline: 3px solid #fff; outline-offset: 4px; }
+    .install { margin: 24px 0; }
+    .note { color: #c7d9d0; font-size: .9rem; }
+    a { color: #99e7bf; text-underline-offset: 3px; }
+    code { font-family: ui-monospace, monospace; background: #07130e; padding: 2px 5px; border-radius: 4px; }
+    ol, ul { padding-left: 22px; }
+    .features { display: flex; gap: 10px; flex-wrap: wrap; margin: 20px 0; }
+    .features span { background: #233e32; border-radius: 6px; padding: 6px 10px; font-size: .85rem; }
+    footer { font-size: .85rem; line-height: 1.8; }
+    [hidden] { display: none !important; }
+    @media(max-width: 500px) { main { padding: 32px 16px; } section { padding: 20px; } button { width: 100%; } }
+  </style>
+</head>
+<body>
+<main>
+  <header>
+    <div class="eyebrow">12 KEYS. ONE ENCODER. MIDI.</div>
+    <h1>ChainOSCPad MIDI</h1>
+    <p class="lead">いつものChainOSCPadを、MIDIキーボードに。<br>同じ配線のまま、USBとBluetoothで音楽アプリへ。</p>
+    <div class="badge" id="version" aria-live="polite">公開バージョンを確認中…</div>
+  </header>
+
+  <section aria-labelledby="install-title">
+    <h2 id="install-title">Web Installer</h2>
+    <p>デスクトップ版Chrome / Edgeから、USB経由で書き込めます。使用する<strong>XIAOボード</strong>を選択してください。</p>
+    <label for="board">ボード</label>
+    <select id="board">
+      <option value="xiao_esp32s3">XIAO ESP32S3 — USB MIDI + BLE-MIDI</option>
+      <option value="xiao_esp32c3">XIAO ESP32C3 — BLE-MIDI</option>
+      <option value="xiao_esp32c6">XIAO ESP32C6 — BLE-MIDI</option>
+      <option value="xiao_esp32c5">XIAO ESP32C5 — BLE-MIDI</option>
+    </select>
+    <div class="install">
+      <esp-web-install-button id="installer" manifest="manifest-xiao_esp32s3.json">
+        <button slot="activate" id="install-button" disabled>インストールする</button>
+        <span slot="unsupported">このブラウザーはWeb Serialに対応していません。PCのChromeまたはEdgeで開いてください。</span>
+      </esp-web-install-button>
+    </div>
+    <p id="load-error" role="alert" hidden></p>
+    <noscript><p>インストールにはJavaScriptを有効にしてください。</p></noscript>
+    <ol>
+      <li>データ通信対応USBケーブルでXIAOを接続します。</li>
+      <li>「インストールする」を押し、XIAOのシリアルポートを選びます。</li>
+      <li>画面の案内に従って書き込み、完了後にRESETを押します。</li>
+    </ol>
+    <p class="note">接続できない場合は、シリアルモニターやDAWを閉じ、BOOTを押しながらUSBを接続してからBOOTを離してください。特にS3のUSB MIDI動作中は、この方法でダウンロードモードへ切り替えられます。</p>
+    <p class="note">既存のファームウェアを置き換えます。「消去」を選ぶと保存済み設定やBLEペアリング情報も削除されます。元のChainOSCPadから切り替える場合は、必要な設定を事前にエクスポートしてください。</p>
+    <p><a id="download" href="https://github.com/shimez/ChainOSCPad-MIDI/releases">ファームウェアをダウンロード</a> · <a href="https://github.com/shimez/ChainOSCPad-MIDI/releases">Release履歴</a></p>
+  </section>
+
+  <section aria-labelledby="use-title">
+    <h2 id="use-title">インストール後の使い方</h2>
+    <div class="features"><span>12キー同時押し</span><span>チャンネル1</span><span>Note 60–71</span><span>Velocity 100</span></div>
+    <ul>
+      <li><strong>S3 / USB：</strong>DAWでChainOSCPad MIDIの入力ポートを選びます。</li>
+      <li><strong>全ボード / BLE：</strong>Bluetooth MIDI対応アプリから<code>ChainOSCPad MIDI</code>へ接続します。</li>
+      <li><strong>エンコーダー：</strong>回転はCC1（Modulation）、押しボタンはCC64（Sustain）。</li>
+    </ul>
+    <p class="note">Windowsでは対応するBLE-MIDIドライバー／アプリが必要です。EdgeのWeb MIDIで入力が見つからない場合は、Bluetooth接続後に<code>edge://restart</code>でEdgeを再起動してください。本プロジェクトではKORG BLE-MIDI Driver 1.16系とEdgeで、この手順によるデバイス認識を確認しました。</p>
+    <p class="note">S3でUSBとBLEの両方を同じ音源へ入力すると二重発音するため、DAW側で使用する入力を選択してください。</p>
+  </section>
+
+  <footer>
+    <a href="https://github.com/shimez/ChainOSCPad-MIDI">GitHub / ソースコード</a> ·
+    <a href="https://github.com/shimez/ChainOSCPad-MIDI/blob/main/README.md">配線・設定ガイド</a> ·
+    <a href="https://github.com/shimez/ChainOSCPad-MIDI/blob/main/THIRD_PARTY_NOTICES.md">ライセンス情報</a>
+    <p>MIT License · 書き込みUI：ESP Web Tools 10.4.0<br>ファームウェアとマニフェストはGitHub Pagesから、書き込みUIはunpkgから読み込みます。</p>
+  </footer>
+</main>
+<script type="module" src="installer.js"></script>
+</body>
+</html>
