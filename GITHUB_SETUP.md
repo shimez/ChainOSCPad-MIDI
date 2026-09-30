@@ -15,6 +15,8 @@
 
 Release作成とPages公開は同じworkflow内で実行します。`GITHUB_TOKEN`によるRelease作成が別workflowを起動しない制約に依存しません。GitHub Settings → Pages → Sourceは **GitHub Actions** に設定してください。
 
+Settings → Environments → `github-pages` → Deployment branches and tagsでは、**Tagの`v*`を許可**してください。Pages初期設定の`main`だけでは、タグからのデプロイが拒否されます。このリポジトリは設定済みです。
+
 ## 次のリリース
 
 1. `VERSION`を更新します（例：`0.1.1`）。必要に応じてREADMEとテスト記録を更新します。
